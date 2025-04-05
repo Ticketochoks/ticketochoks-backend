@@ -1,0 +1,8 @@
+package com.deltalik.exception;
+
+public class ResourceNotFoundException extends RuntimeException {
+
+  public ResourceNotFoundException(String message) {
+    super(message);
+  }
+}
