@@ -10,6 +10,6 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
-  @Mapping(target = "password", ignore = true)
+//  @Mapping(target = "password", ignore = true)
   UserDto.Response toUserResponseDto(User user);
 }

@@ -7,7 +7,6 @@ import com.deltalik.exception.ExceptionFactory;
 import com.deltalik.mapper.UserMapper;
 import com.deltalik.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,6 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final UserMapper userMapper;
-
-  public Optional<User> findUserById(Long id) {
-    return userRepository.findById(id);
-  }
 
   @Transactional
   public UserDto.Response createUser(UserDto.Request registrationRequestDto) {
