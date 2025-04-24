@@ -1,10 +1,10 @@
-package com.deltalik.dto;
+package com.deltalik.dto.event;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class LocationDto {
+public class EventLocationDto {
 
   @NotBlank(message = "Street is required")
   private String street;

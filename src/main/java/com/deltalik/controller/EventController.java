@@ -1,10 +1,10 @@
 package com.deltalik.controller;
 
-import com.deltalik.dto.EventDto;
+import com.deltalik.dto.event.EventRequestDto;
+import com.deltalik.dto.event.EventResponseDto;
 import com.deltalik.service.EventService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,8 +28,8 @@ public class EventController {
   private final EventService eventService;
 
   @PostMapping
-  public ResponseEntity<EventDto.Response> createEvent(@Valid @RequestBody EventDto.Request eventDto) {
-    EventDto.Response createdEvent = eventService.createEvent(eventDto);
+  public ResponseEntity<EventResponseDto> createEvent(@Valid @RequestBody EventRequestDto eventDto) {
+    EventResponseDto createdEvent = eventService.createEvent(eventDto);
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .header("Location", "/api/v1/events/" + createdEvent.getId())
@@ -37,16 +37,16 @@ public class EventController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<EventDto.Response> getEvent(
+  public ResponseEntity<EventResponseDto> getEvent(
       @PathVariable @NotNull(message = "Id is required") Long id) {
-    EventDto.Response event = eventService.getEventById(id);
+    EventResponseDto event = eventService.getEventById(id);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(event);
   }
 
   @GetMapping
-  public Page<EventDto.Response> getEvents(Pageable pageable) {
+  public Page<EventResponseDto> getEvents(Pageable pageable) {
     return eventService.getAllEvents(pageable);
   }
 

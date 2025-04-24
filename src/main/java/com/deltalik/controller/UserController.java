@@ -1,7 +1,7 @@
 package com.deltalik.controller;
 
-import com.deltalik.dto.UserDto;
-import com.deltalik.dto.UserDto.Response;
+import com.deltalik.dto.user.UserRequestDto;
+import com.deltalik.dto.user.UserResponseDto;
 import com.deltalik.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -27,8 +27,8 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping
-  public ResponseEntity<Response> createUser(@Valid @RequestBody UserDto.Request request) {
-    UserDto.Response createdUser = userService.createUser(request);
+  public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto request) {
+    UserResponseDto createdUser = userService.createUser(request);
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .header("Location", "/api/v1/users/" + createdUser.getId())
@@ -36,7 +36,7 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Response> getUserById(
+  public ResponseEntity<UserResponseDto> getUserById(
       @PathVariable @NotNull(message = "Id is required") Long id) {
     return ResponseEntity
         .status(HttpStatus.OK)

@@ -1,8 +1,8 @@
 package com.deltalik.service;
 
-import com.deltalik.dto.EventDto;
-import com.deltalik.dto.EventDto.Response;
-import com.deltalik.dto.LocationDto;
+import com.deltalik.dto.event.EventLocationDto;
+import com.deltalik.dto.event.EventRequestDto;
+import com.deltalik.dto.event.EventResponseDto;
 import com.deltalik.entity.Event;
 import com.deltalik.exception.ExceptionFactory;
 import com.deltalik.mapper.EventMapper;
@@ -24,7 +24,7 @@ public class EventService {
   private final EventRepository eventRepository;
   private final EventMapper eventMapper;
 
-  public EventDto.Response getEventById(Long id) {
+  public EventResponseDto getEventById(Long id) {
     Event event = eventRepository.findById(id).orElseThrow(
         () -> ExceptionFactory.userNotFoundById(id)
     );
@@ -33,8 +33,7 @@ public class EventService {
     return eventMapper.toEventResponseDto(event);
   }
 
-  public Page<Response> getAllEvents(Pageable pageable) {
-
+  public Page<EventResponseDto> getAllEvents(Pageable pageable) {
     if (pageable.getPageSize() > 10) {
       pageable = PageRequest.of(
           pageable.getPageNumber(),
@@ -48,8 +47,9 @@ public class EventService {
   }
 
   @Transactional
-  public EventDto.Response createEvent(EventDto.Request eventDto) {
-    validateEventDoesNotExist(eventDto.getLocation(), eventDto.getStartDateTime(), eventDto.getEndDateTime());
+  public EventResponseDto createEvent(EventRequestDto eventDto) {
+    validateEventDoesNotExist(eventDto.getLocation(), eventDto.getStartDateTime(),
+        eventDto.getEndDateTime());
 
     Event event = Event.builder()
         .name(eventDto.getName())
@@ -75,14 +75,14 @@ public class EventService {
     eventRepository.deleteById(id);
   }
 
-  private void validateEventDoesNotExist(LocationDto locationDto, ZonedDateTime startDateTime,
+  private void validateEventDoesNotExist(EventLocationDto eventLocationDto, ZonedDateTime startDateTime,
       ZonedDateTime endDateTime) {
-    eventRepository.findByLocationAndTimeOverlap(eventMapper.toLocation(locationDto),
+    eventRepository.findByLocationAndTimeOverlap(eventMapper.toLocation(eventLocationDto),
             startDateTime, endDateTime)
         .ifPresent(
             event -> {
-              throw ExceptionFactory.eventAlreadyExists(locationDto.getStreet(),
-                  locationDto.getCity(),
+              throw ExceptionFactory.eventAlreadyExists(eventLocationDto.getStreet(),
+                  eventLocationDto.getCity(),
                   startDateTime,
                   endDateTime);
             }

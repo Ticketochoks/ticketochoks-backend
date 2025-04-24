@@ -1,6 +1,7 @@
 package com.deltalik.service;
 
-import com.deltalik.dto.UserDto;
+import com.deltalik.dto.user.UserRequestDto;
+import com.deltalik.dto.user.UserResponseDto;
 import com.deltalik.entity.Role;
 import com.deltalik.entity.User;
 import com.deltalik.exception.ExceptionFactory;
@@ -20,7 +21,7 @@ public class UserService {
   private final UserMapper userMapper;
 
   @Transactional
-  public UserDto.Response createUser(UserDto.Request registrationRequestDto) {
+  public UserResponseDto createUser(UserRequestDto registrationRequestDto) {
     validateUserDoesNotExist(registrationRequestDto.getEmail(),
         registrationRequestDto.getPhoneNumber());
 
@@ -37,7 +38,7 @@ public class UserService {
     return userMapper.toUserResponseDto(savedUser);
   }
 
-  public UserDto.Response getUserById(Long id) {
+  public UserResponseDto getUserById(Long id) {
     User user = userRepository.findById(id).orElseThrow(
         () -> ExceptionFactory.userNotFoundById(id));
 

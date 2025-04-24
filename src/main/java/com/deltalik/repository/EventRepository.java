@@ -21,7 +21,4 @@ public interface EventRepository extends JpaRepository<Event, Long> {
       @Param("location") Location location,
       @Param("startTime") ZonedDateTime startTime,
       @Param("endTime") ZonedDateTime endTime);
-
-//  Optional<Event> findByLocationStreetAndLocationCityAndStartDateTime(String street, String city,
-//      ZonedDateTime startDateTime);
 }

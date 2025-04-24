@@ -1,4 +1,4 @@
-package com.deltalik.dto;
+package com.deltalik.dto.common;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
