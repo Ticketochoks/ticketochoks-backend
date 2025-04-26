@@ -1,10 +1,11 @@
 package com.deltalik.dto.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.time.ZonedDateTime;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
@@ -15,18 +16,27 @@ public class EventRequestDto {
 
   @NotNull(message = "Location is required")
   @Valid
-  private EventLocationDto location;
+  private EventLocationRequestDto location;
 
-  @NotNull(message = "Start time is required")
-  private ZonedDateTime startDateTime;
+  @NotBlank(message = "Start date/time is required")
+  @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  private String startDateTime;
 
-  @NotNull(message = "End time is required")
-  private ZonedDateTime endDateTime;
+  @NotBlank(message = "End date/time is required")
+  @JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  private String endDateTime;
 
-  @Min(value = 1, message = "Number of available tickets must be at least 1")
-  private int availableTickets;
+  @NotBlank(message = "Timezone is required")
+  private String timezone;
 
-  @Min(value = 0, message = "Ticket price must be non-negative")
-  private int ticketPrice;
+  @NotNull(message = "Available tickets is required")
+  @Positive(message = "Available tickets must be positive")
+  private Integer availableTickets;
+
+  @NotNull(message = "Ticket price is required")
+  @Positive(message = "Ticket price must be positive")
+  private Integer ticketPrice;
+
+  private String dateTimeFormat;
 }
 

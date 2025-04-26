@@ -3,8 +3,6 @@ package com.deltalik.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
@@ -32,6 +30,9 @@ public class Event extends AbstractBaseEntity<Long> {
 
   @Column(nullable = false)
   private ZonedDateTime endDateTime;
+
+  @Column(nullable = false)
+  private String timezone;
 
   @Min(1)
   @Column(nullable = false)

@@ -1,6 +1,7 @@
 package com.deltalik.mapper;
 
-import com.deltalik.dto.event.EventLocationDto;
+import com.deltalik.dto.event.EventLocationRequestDto;
+import com.deltalik.dto.event.EventLocationResponseDto;
 import com.deltalik.dto.event.EventResponseDto;
 import com.deltalik.entity.Event;
 import com.deltalik.entity.Location;
@@ -12,6 +13,6 @@ import org.mapstruct.ReportingPolicy;
 public interface EventMapper {
 
   EventResponseDto toEventResponseDto(Event event);
-  EventLocationDto toLocationDto(Location location);
-  Location toLocation(EventLocationDto eventLocationDto);
+  EventLocationResponseDto toLocationResponseDto(Location location);
+  Location toLocation(EventLocationRequestDto eventLocationRequestDto);
 }

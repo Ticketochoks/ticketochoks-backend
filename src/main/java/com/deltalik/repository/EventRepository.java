@@ -15,6 +15,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
   @Query("select e from Event e where " +
       "e.location.street = :#{#location.street} AND " +
       "e.location.city = :#{#location.city} AND " +
+      "e.location.country = :#{#location.country} AND " +
       "e.startDateTime < :endTime AND " +
       "e.endDateTime > :startTime")
   Optional<Event> findByLocationAndTimeOverlap(

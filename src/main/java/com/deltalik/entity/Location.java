@@ -18,7 +18,4 @@ public class Location {
 
   @Column(nullable = false)
   private String country;
-
-  @Column(nullable = false)
-  private String timezone;
 }

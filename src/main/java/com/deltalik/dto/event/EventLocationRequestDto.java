@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class EventLocationDto {
+public class EventLocationRequestDto {
 
   @NotBlank(message = "Street is required")
   private String street;
@@ -14,7 +14,4 @@ public class EventLocationDto {
 
   @NotBlank(message = "Country is required")
   private String country;
-
-  @NotBlank(message = "Timezone is required")
-  private String timezone;
 }
