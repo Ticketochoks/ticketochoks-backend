@@ -33,4 +33,10 @@ public class ExceptionFactory {
     log.warn(msg);
     return new DuplicateResourceException(msg);
   }
+
+  public static ResourceNotFoundException roleNotFoundByName(String name) {
+    String msg = String.format("Role not found by id: %s", name);
+    log.warn(msg);
+    return new ResourceNotFoundException(msg);
+  }
 }

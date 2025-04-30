@@ -2,12 +2,12 @@ package com.deltalik.service;
 
 import com.deltalik.dto.user.UserRequestDto;
 import com.deltalik.dto.user.UserResponseDto;
-import com.deltalik.entity.Role;
 import com.deltalik.entity.User;
 import com.deltalik.exception.ExceptionFactory;
 import com.deltalik.mapper.UserMapper;
 import com.deltalik.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final RoleService roleService;
   private final UserMapper userMapper;
 
   @Transactional
@@ -31,7 +32,7 @@ public class UserService {
         .lastName(registrationRequestDto.getLastName())
         .phoneNumber(registrationRequestDto.getPhoneNumber())
         .passwordHash(registrationRequestDto.getPassword())
-        .role(Role.USER)
+        .roles(Set.of(roleService.getUserRole()))
         .build();
 
     User savedUser = userRepository.save(user);
