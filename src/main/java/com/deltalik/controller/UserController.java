@@ -1,6 +1,6 @@
 package com.deltalik.controller;
 
-import com.deltalik.dto.user.UserRequestDto;
+import com.deltalik.dto.user.RegistrationRequestDto;
 import com.deltalik.dto.user.UserResponseDto;
 import com.deltalik.service.UserService;
 import jakarta.validation.Valid;
@@ -27,7 +27,7 @@ public class UserController {
   private final UserService userService;
 
   @PostMapping
-  public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto request) {
+  public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody RegistrationRequestDto request) {
     UserResponseDto createdUser = userService.createUser(request);
     return ResponseEntity
         .status(HttpStatus.CREATED)

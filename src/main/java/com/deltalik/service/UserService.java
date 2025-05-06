@@ -1,6 +1,6 @@
 package com.deltalik.service;
 
-import com.deltalik.dto.user.UserRequestDto;
+import com.deltalik.dto.user.RegistrationRequestDto;
 import com.deltalik.dto.user.UserResponseDto;
 import com.deltalik.entity.User;
 import com.deltalik.exception.ExceptionFactory;
@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -20,9 +22,10 @@ public class UserService {
   private final UserRepository userRepository;
   private final RoleService roleService;
   private final UserMapper userMapper;
+  private final PasswordEncoder passwordEncoder;
 
   @Transactional
-  public UserResponseDto createUser(UserRequestDto registrationRequestDto) {
+  public UserResponseDto createUser(RegistrationRequestDto registrationRequestDto) {
     validateUserDoesNotExist(registrationRequestDto.getEmail(),
         registrationRequestDto.getPhoneNumber());
 
@@ -31,7 +34,7 @@ public class UserService {
         .firstName(registrationRequestDto.getFirstName())
         .lastName(registrationRequestDto.getLastName())
         .phoneNumber(registrationRequestDto.getPhoneNumber())
-        .passwordHash(registrationRequestDto.getPassword())
+        .passwordHash(passwordEncoder.encode(registrationRequestDto.getPassword()))
         .roles(Set.of(roleService.getUserRole()))
         .build();
 
@@ -45,6 +48,12 @@ public class UserService {
 
     log.info("User is found by id {}", id);
     return userMapper.toUserResponseDto(user);
+  }
+
+  public User getUserEntityByEmail(String email) {
+    return userRepository.findByEmail(email).orElseThrow(
+        () -> ExceptionFactory.userNotFoundByEmail(email)
+    );
   }
 
   @Transactional

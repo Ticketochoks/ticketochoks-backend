@@ -30,7 +30,7 @@ public class RoleInitializer {
         .map(roleName -> Role.builder().name(roleName).build())
         .toList();
 
-    if (missingRoles.isEmpty()) {
+    if (!missingRoles.isEmpty()) {
       roleRepository.saveAll(missingRoles);
     }
   }

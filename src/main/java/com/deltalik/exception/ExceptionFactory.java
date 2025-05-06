@@ -2,12 +2,19 @@ package com.deltalik.exception;
 
 import java.time.ZonedDateTime;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 
 @Slf4j
 public class ExceptionFactory {
 
   public static ResourceNotFoundException userNotFoundById(Long id) {
     String msg = String.format("User not found by id: %d", id);
+    log.warn(msg);
+    return new ResourceNotFoundException(msg);
+  }
+
+  public static ResourceNotFoundException userNotFoundByEmail(String email) {
+    String msg = String.format("User not found by email: %s", email);
     log.warn(msg);
     return new ResourceNotFoundException(msg);
   }
@@ -38,5 +45,11 @@ public class ExceptionFactory {
     String msg = String.format("Role not found by id: %s", name);
     log.warn(msg);
     return new ResourceNotFoundException(msg);
+  }
+
+  public static BadCredentialsException badCredentialsException() {
+    String msg = "Invalid username or password";
+    log.warn(msg);
+    return new BadCredentialsException(msg);
   }
 }
