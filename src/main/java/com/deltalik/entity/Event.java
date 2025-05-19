@@ -1,15 +1,14 @@
 package com.deltalik.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.ZonedDateTime;
 
 @Data
 @NoArgsConstructor
@@ -34,9 +33,9 @@ public class Event extends AbstractBaseEntity<Long> {
   @Column(nullable = false)
   private String timezone;
 
-  @Min(1)
-  @Column(nullable = false)
-  private int availableTickets;
+  @JoinColumn(nullable = false)
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private VenueLayout venueLayout;
 
   @Min(0)
   @Column(nullable = false)

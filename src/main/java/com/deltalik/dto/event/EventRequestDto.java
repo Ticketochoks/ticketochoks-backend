@@ -29,9 +29,9 @@ public class EventRequestDto {
   @NotBlank(message = "Timezone is required")
   private String timezone;
 
-  @NotNull(message = "Available tickets is required")
-  @Positive(message = "Available tickets must be positive")
-  private Integer availableTickets;
+  @NotNull(message = "Venue layout id is required")
+  @Positive(message = "Venue layout id must be positive")
+  private Long venueLayoutId;
 
   @NotNull(message = "Ticket price is required")
   @Positive(message = "Ticket price must be positive")

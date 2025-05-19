@@ -3,11 +3,12 @@ package com.deltalik.service;
 import com.deltalik.dto.event.EventLocationRequestDto;
 import com.deltalik.dto.event.EventRequestDto;
 import com.deltalik.dto.event.EventResponseDto;
-import com.deltalik.entity.Event;
-import com.deltalik.entity.Location;
+import com.deltalik.entity.*;
 import com.deltalik.exception.ExceptionFactory;
 import com.deltalik.mapper.EventMapper;
 import com.deltalik.repository.EventRepository;
+import com.deltalik.repository.SeatRepository;
+import com.deltalik.repository.VenueLayoutRepository;
 import jakarta.transaction.Transactional;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -26,6 +27,8 @@ public class EventService {
   private final DateTimeService dateTimeService;
   private final EventRepository eventRepository;
   private final EventMapper eventMapper;
+  private final SeatRepository seatRepository;
+  private final VenueLayoutRepository venueLayoutRepository;
 
   public EventResponseDto getEventById(Long id) {
     Event event = eventRepository.findById(id).orElseThrow(
@@ -41,7 +44,6 @@ public class EventService {
         .startDateTime(event.getStartDateTime())
         .endDateTime(event.getEndDateTime())
         .timezone(event.getTimezone())
-        .availableTickets(event.getAvailableTickets())
         .ticketPrice(event.getTicketPrice())
         .build();
   }
@@ -80,18 +82,25 @@ public class EventService {
 
     validateEventDoesNotExist(eventDto.getLocation(), startDateTime, endDateTime);
 
+    VenueLayout layout = venueLayoutRepository.findById(eventDto.getVenueLayoutId())
+            .orElseThrow(() -> ExceptionFactory.venueLayoutNotFoundById(eventDto.getVenueLayoutId()));
+
     Event event = Event.builder()
         .name(eventDto.getName())
         .location(eventMapper.toLocation(eventDto.getLocation()))
         .startDateTime(startDateTime)
         .endDateTime(endDateTime)
         .timezone(timezone)
-        .availableTickets(eventDto.getAvailableTickets())
         .ticketPrice(eventDto.getTicketPrice())
+        .venueLayout(layout)
         .build();
 
     Event savedEvent = eventRepository.save(event);
     log.info("Event is created with id {} and name {}", savedEvent.getId(), savedEvent.getName());
+
+      for (Section section : event.getVenueLayout().getSections()) {
+          generateSeatsForSection(savedEvent, section);
+      }
 
     return EventResponseDto.builder()
         .id(event.getId())
@@ -100,10 +109,25 @@ public class EventService {
         .startDateTime(startDateTime)
         .endDateTime(endDateTime)
         .timezone(event.getTimezone())
-        .availableTickets(event.getAvailableTickets())
         .ticketPrice(event.getTicketPrice())
         .build();
 
+  }
+
+  private void generateSeatsForSection(Event event, Section section) {
+    for (int rowNum = 1; rowNum <= section.getRows(); rowNum++) {
+      for (int seatNum = 1; seatNum <= section.getSeatsPerRow(); seatNum++) {
+        Seat seat = Seat.builder()
+                .event(event)
+                .section(section)
+                .rowNumber(rowNum)
+                .seatNumber(seatNum)
+                .status(SeatStatus.AVAILABLE)
+                .build();
+
+        seatRepository.save(seat);
+      }
+    }
   }
 
   @Transactional

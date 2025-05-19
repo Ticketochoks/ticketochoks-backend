@@ -17,6 +17,6 @@ public class EventResponseDto extends BaseResponse {
   private ZonedDateTime startDateTime;
   private ZonedDateTime endDateTime;
   private String timezone;
-  private int availableTickets;
-  private int ticketPrice;
+  private Long venueLayoutId;
+  private Integer ticketPrice;
 }
