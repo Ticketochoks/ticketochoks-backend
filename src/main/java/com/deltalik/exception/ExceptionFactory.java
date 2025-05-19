@@ -25,6 +25,24 @@ public class ExceptionFactory {
     return new DuplicateResourceException(msg);
   }
 
+  public static ResourceNotFoundException roleNotFoundByName(String name) {
+    String msg = String.format("Role not found by id: %s", name);
+    log.warn(msg);
+    return new ResourceNotFoundException(msg);
+  }
+
+  public static BadCredentialsException badCredentialsException() {
+    String msg = "Invalid username or password";
+    log.warn(msg);
+    return new BadCredentialsException(msg);
+  }
+
+  public static IllegalStateException authenticatedUserNotFound() {
+    String msg = "Authenticated user not found";
+    log.warn(msg);
+    return new IllegalStateException(msg);
+  }
+
   public static ResourceNotFoundException eventNotFoundById(Long id) {
     String msg = String.format("Event not found by id: %d", id);
     log.warn(msg);
@@ -39,17 +57,5 @@ public class ExceptionFactory {
         street, city, startDateTime, endDateTime);
     log.warn(msg);
     return new DuplicateResourceException(msg);
-  }
-
-  public static ResourceNotFoundException roleNotFoundByName(String name) {
-    String msg = String.format("Role not found by id: %s", name);
-    log.warn(msg);
-    return new ResourceNotFoundException(msg);
-  }
-
-  public static BadCredentialsException badCredentialsException() {
-    String msg = "Invalid username or password";
-    log.warn(msg);
-    return new BadCredentialsException(msg);
   }
 }
