@@ -58,4 +58,22 @@ public class ExceptionFactory {
     log.warn(msg);
     return new DuplicateResourceException(msg);
   }
+
+  public static ResourceNotFoundException seatNotFoundByEventIdAndRowAndSeat(Long eventId, int row, int seat) {
+    String msg = String.format("Seat not found for the event with id %d and with %d row and %d seat", eventId, row, seat);
+    log.warn(msg);
+    return new ResourceNotFoundException(msg);
+  }
+
+  public static DuplicateResourceException seatAlreadyTaken(Long eventId, int row, int seat) {
+    String msg = String.format("Seat for %d eventId with %d row and %d seat is already taken", eventId, row, seat);
+    log.warn(msg);
+    return new DuplicateResourceException(msg);
+  }
+
+  public static ResourceNotFoundException venueLayoutNotFoundById(Long id) {
+    String msg = String.format("Venue layout not found by id: %d", id);
+    log.warn(msg);
+    return new ResourceNotFoundException(msg);
+  }
 }
