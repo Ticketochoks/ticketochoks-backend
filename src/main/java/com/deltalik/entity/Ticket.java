@@ -25,7 +25,7 @@ public class Ticket extends AbstractBaseEntity<Long> {
   @Column(nullable = true)
   private ZonedDateTime purchaseDateTime;
 
-  @ManyToOne
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "seat_id")
   private Seat seat;
 }

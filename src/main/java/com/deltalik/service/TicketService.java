@@ -12,7 +12,6 @@ import com.deltalik.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
@@ -28,15 +27,14 @@ public class TicketService {
     private final AuthenticationFacade authFacade;
     private final TicketMapper ticketMapper;
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public TicketResponseDto purchase(TicketRequestDto ticketRequestDto) {
         User user = authFacade.getCurrentUser();
 
         Event event = eventRepository.findById(ticketRequestDto.getEventId())
                 .orElseThrow(() -> ExceptionFactory.eventNotFoundById(ticketRequestDto.getEventId()));
 
-        // add locking
-        Seat seat = seatRepository.findByEventIdAndSeatNumberAndRowNumber(
+        Seat seat = seatRepository.lockSeatByEventAndPosition(
                         ticketRequestDto.getEventId(),
                         ticketRequestDto.getSeatDto().getSeatNumber(),
                         ticketRequestDto.getSeatDto().getRowNumber())
@@ -55,8 +53,6 @@ public class TicketService {
         }
 
         // check if user has sufficient funds
-        seat.setStatus(SeatStatus.RESERVED);
-        seatRepository.save(seat);
 
         try {
             // simulate payment
@@ -68,18 +64,13 @@ public class TicketService {
                     .build();
 
             Ticket savedTicket = ticketRepository.save(ticket);
-
             seat.setStatus(SeatStatus.PURCHASED);
-            seatRepository.save(seat);
 
             log.info("Ticket purchased successfully: eventId={}, userId={}, seatNumber={}, rowNumber={}",
                     event.getId(), user.getId(), seat.getSeatNumber(), seat.getRowNumber());
 
             return ticketMapper.toTicketResponseDto(savedTicket);
         } catch (Exception e) {
-            seat.setStatus(SeatStatus.AVAILABLE);
-            seatRepository.save(seat);
-
             log.error("Payment failed for ticket purchase: eventId={}, userId={}, seatNumber={}, rowNumber={}",
                     event.getId(), user.getId(), ticketRequestDto.getSeatDto().getSeatNumber(),
                     ticketRequestDto.getSeatDto().getRowNumber(), e);
