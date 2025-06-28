@@ -82,8 +82,8 @@ public class EventService {
 
     validateEventDoesNotExist(eventDto.getLocation(), startDateTime, endDateTime);
 
-    VenueLayout layout = venueLayoutRepository.findById(eventDto.getVenueLayoutId())
-            .orElseThrow(() -> ExceptionFactory.venueLayoutNotFoundById(eventDto.getVenueLayoutId()));
+    VenueLayout layout = venueLayoutRepository.findByName(eventDto.getVenueLayoutType().getLabel())
+            .orElseThrow(() -> ExceptionFactory.venueLayoutNotFoundByName(eventDto.getVenueLayoutType().getLabel()));
 
     Event event = Event.builder()
         .name(eventDto.getName())
@@ -98,9 +98,7 @@ public class EventService {
     Event savedEvent = eventRepository.save(event);
     log.info("Event is created with id {} and name {}", savedEvent.getId(), savedEvent.getName());
 
-      for (Section section : event.getVenueLayout().getSections()) {
-          generateSeatsForSection(savedEvent, section);
-      }
+    generateSeatsForLayout(savedEvent, layout);
 
     return EventResponseDto.builder()
         .id(event.getId())
@@ -114,12 +112,11 @@ public class EventService {
 
   }
 
-  private void generateSeatsForSection(Event event, Section section) {
-    for (int rowNum = 1; rowNum <= section.getRows(); rowNum++) {
-      for (int seatNum = 1; seatNum <= section.getSeatsPerRow(); seatNum++) {
+  private void generateSeatsForLayout(Event event, VenueLayout layout) {
+    for (int rowNum = 1; rowNum <= layout.getRows(); rowNum++) {
+      for (int seatNum = 1; seatNum <= layout.getSeatsPerRow(); seatNum++) {
         Seat seat = Seat.builder()
                 .event(event)
-                .section(section)
                 .rowNumber(rowNum)
                 .seatNumber(seatNum)
                 .status(SeatStatus.AVAILABLE)

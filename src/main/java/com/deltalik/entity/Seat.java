@@ -17,10 +17,6 @@ public class Seat extends AbstractBaseEntity<Long> {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @ManyToOne
-    @JoinColumn(name = "section_id", nullable = false)
-    private Section section;
-
     @Column(nullable = false)
     private int seatNumber;
 

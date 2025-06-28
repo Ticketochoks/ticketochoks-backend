@@ -1,5 +1,6 @@
 package com.deltalik.dto.event;
 
+import com.deltalik.entity.VenueLayoutType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import jakarta.validation.Valid;
@@ -29,9 +30,8 @@ public class EventRequestDto {
   @NotBlank(message = "Timezone is required")
   private String timezone;
 
-  @NotNull(message = "Venue layout id is required")
-  @Positive(message = "Venue layout id must be positive")
-  private Long venueLayoutId;
+  @NotNull(message = "Venue layout type is required")
+  private VenueLayoutType venueLayoutType;
 
   @NotNull(message = "Ticket price is required")
   @Positive(message = "Ticket price must be positive")

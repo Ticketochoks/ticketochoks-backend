@@ -71,8 +71,8 @@ public class ExceptionFactory {
     return new DuplicateResourceException(msg);
   }
 
-  public static ResourceNotFoundException venueLayoutNotFoundById(Long id) {
-    String msg = String.format("Venue layout not found by id: %d", id);
+  public static ResourceNotFoundException venueLayoutNotFoundByName(String name) {
+    String msg = String.format("Venue layout not found by name: %s", name);
     log.warn(msg);
     return new ResourceNotFoundException(msg);
   }
