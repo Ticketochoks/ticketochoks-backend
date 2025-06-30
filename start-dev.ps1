@@ -1,7 +1,6 @@
-#!/bin/bash
-export DB_URL=jdbc:postgresql://<host>:<port>/<database>
-export DB_USERNAME=
-export DB_PASSWORD=
-export SPRING_PROFILES_ACTIVE=dev
+$env:DB_URL="jdbc:postgresql://<host>:<port>/<database>"
+$env:DB_USERNAME=""
+$env:DB_PASSWORD=""
+$env:SPRING_PROFILES_ACTIVE="dev"
 
-./gradlew bootRun
+./gradlew.bat bootRun
