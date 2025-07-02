@@ -32,10 +32,13 @@ public class SecurityConfiguration {
             exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
         .sessionManagement(session ->
             session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(authorize ->
-            authorize.requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/public/**").permitAll()
-                .anyRequest().authenticated()
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(
+                "/v3/api-docs/**",
+                "/swagger-ui/**"
+            ).permitAll()
+            .requestMatchers("/api/v1/auth/**").permitAll()
+            .anyRequest().authenticated()
         );
     http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     return http.build();
