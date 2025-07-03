@@ -26,6 +26,8 @@ ext {
 
     mapStructVersion = '1.5.5.Final'
 
+    springDocVersion = '2.8.5'
+
     junitVersion = '5.10.1'
 }
 
@@ -54,6 +56,9 @@ dependencies {
     // Flyway
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-database-postgresql'
+
+    // SpringDoc
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}")
 
     // Jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
