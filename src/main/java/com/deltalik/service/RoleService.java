@@ -22,20 +22,6 @@ public class RoleService {
     );
   }
 
-  public Role getOrganizerRole() {
-    String name = RoleType.ORGANIZER.name();
-    return roleRepository.findByName(name).orElseThrow(
-        () -> ExceptionFactory.roleNotFoundByName(name)
-    );
-  }
-
-  public Role getModeratorRole() {
-    String name = RoleType.MODERATOR.name();
-    return roleRepository.findByName(name).orElseThrow(
-        () -> ExceptionFactory.roleNotFoundByName(name)
-    );
-  }
-
   public Role getAdminRole() {
     String name = RoleType.ADMIN.name();
     return roleRepository.findByName(name).orElseThrow(
